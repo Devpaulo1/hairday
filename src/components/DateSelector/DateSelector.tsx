@@ -28,7 +28,7 @@ export function DateSelector({ date, onDateChange }: DateSelectorProps) {
           type="date"
           value={date}
           onChange={(event) => onDateChange(event.target.value)}
-          className="w-full rounded-md border border-line bg-surface-raised py-2.5 pl-10 pr-3 text-sm text-content transition-colors focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className="w-full rounded-md border border-line bg-surface py-2.5 pl-10 pr-3 text-sm text-content transition-colors focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         />
       </div>
     </header>

@@ -22,7 +22,7 @@ export function AppointmentItem({ appointment }: AppointmentItemProps) {
         type="button"
         onClick={() => removeAppointment(appointment.id)}
         aria-label={`Excluir agendamento de ${appointment.clientName}`}
-        className="rounded-md p-2 text-content-subtle transition-colors hover:text-red-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        className="rounded-md p-2 text-accent-soft transition-colors hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       >
         <TrashIcon className="size-4" />
       </button>

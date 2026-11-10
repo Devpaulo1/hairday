@@ -57,13 +57,13 @@ export function AppointmentForm({ onAppointmentCreated }: AppointmentFormProps) 
           Data
         </label>
         <div className="relative mt-2">
-          <CalendarIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-content-subtle" />
+          <CalendarIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-accent-soft" />
           <input
             id="appointment-date"
             type="date"
             value={date}
             onChange={(event) => setDate(event.target.value)}
-            className="w-full rounded-md border border-line bg-surface py-2.5 pl-10 pr-3 text-sm text-content transition-colors focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            className="w-full rounded-md border border-line bg-surface-inset py-2.5 pl-10 pr-3 text-sm text-content transition-colors focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           />
         </div>
       </div>
@@ -106,14 +106,14 @@ export function AppointmentForm({ onAppointmentCreated }: AppointmentFormProps) 
           Cliente
         </label>
         <div className="relative mt-2">
-          <UserIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-content-subtle" />
+          <UserIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-accent-soft" />
           <input
             id="client-name"
             type="text"
             value={clientName}
             onChange={(event) => setClientName(event.target.value)}
             placeholder="Nome do cliente"
-            className="w-full rounded-md border border-line bg-surface py-2.5 pl-10 pr-3 text-sm text-content placeholder:text-content-subtle transition-colors focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            className="w-full rounded-md border border-line bg-surface-inset py-2.5 pl-10 pr-3 text-sm text-content placeholder:text-content-subtle transition-colors focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           />
         </div>
       </div>

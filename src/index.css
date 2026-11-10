@@ -8,7 +8,8 @@
 @theme {
   /* Fundos */
   --color-surface: #19191b;
-  --color-surface-raised: #232325;
+  --color-surface-raised: #2a292e;
+  --color-surface-inset: #232325;
   --color-surface-hover: #2f2d32;
 
   /* Bordas */
@@ -39,7 +40,9 @@
 
   /* O input de data do navegador precisa ficar visível no fundo escuro. */
   input[type='date']::-webkit-calendar-picker-indicator {
-    opacity: 0.7;
+    /* Filtro para deixar o ícone nativo com o tom dourado do Figma. */
+    filter: invert(78%) sepia(45%) saturate(650%) hue-rotate(2deg) brightness(92%);
+    opacity: 0.9;
     cursor: pointer;
   }
 

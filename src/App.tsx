@@ -15,7 +15,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-surface">
-      <main className="mx-auto grid w-full max-w-6xl items-start gap-6 px-4 py-6 md:px-8 md:py-10 lg:grid-cols-[340px_minmax(0,1fr)] lg:gap-10">
+      <main className="mx-auto grid w-full max-w-6xl items-start gap-6 px-4 py-6 md:px-8 md:py-10 lg:grid-cols-[380px_minmax(0,1fr)] lg:gap-10">
         <ScheduleSidebar>
           <AppointmentForm onAppointmentCreated={setSelectedDate} />
         </ScheduleSidebar>

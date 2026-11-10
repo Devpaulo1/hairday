@@ -2,7 +2,7 @@
 
 Aplicação web de agendamento de cortes de cabelo, construída com **React**, **TypeScript**, **Vite** e **Tailwind CSS**, seguindo o protótipo do Figma.
 
-![Interface desktop](docs/screenshots/hairday-desktop.jpg)
+![Interface desktop](docs/screenshots/hairday-desktop.png)
 
 ## ✨ Funcionalidades
 
@@ -14,7 +14,7 @@ Aplicação web de agendamento de cortes de cabelo, construída com **React**, *
 - **Estado vazio**: cada período sem registros mostra a mensagem *"Você ainda não tem agendamentos cadastrados nesse período."*
 - **Responsivo**: no desktop o formulário fica à esquerda e a agenda à direita; em telas menores os blocos viram uma coluna.
 
-![Interface mobile](docs/screenshots/hairday-mobile.jpg)
+![Interface mobile](docs/screenshots/hairday-mobile.png)
 
 ## 🚀 Como executar
 
@@ -88,20 +88,43 @@ As cores foram extraídas do frame "Projeto" do Figma e transformadas em variáv
 
 | Token | Valor | Uso |
 | --- | --- | --- |
-| `surface` | `#19191b` | Fundo da aplicação |
-| `surface-raised` | `#232325` | Painel lateral |
+| `surface` | `#19191b` | Fundo da aplicação e cards da agenda |
+| `surface-raised` | `#2a292e` | Painel lateral |
+| `surface-inset` | `#232325` | Campos de data e cliente |
 | `surface-hover` | `#2f2d32` | Botões de horário |
 | `line` | `#2e2c31` | Bordas |
 | `accent` | `#b8952f` | Botão Agendar |
-| `accent-soft` | `#c7a452` | Logo, ícones e horário selecionado |
+| `accent-soft` | `#c7a452` | Logo, ícones (calendário, usuário, lixeira, períodos) e horário selecionado |
 | `content-strong` | `#ffffff` | Títulos |
 | `content` | `#c7c7c9` | Horário do agendamento |
 | `content-muted` | `#939395` | Nome do cliente e textos de apoio |
 | `content-subtle` | `#6c6c6e` | Faixas de horário e estados vazios |
 
+> Todos esses valores foram **amostrados pixel a pixel** no frame do Figma e conferidos contra os estilos computados da aplicação (ver tabela de fidelidade abaixo).
+
 ## 🔗 Protótipo
 
 [Figma — Plataforma de agendamento (frame "Projeto", node 3-376)](https://www.figma.com/design/hirNhBBECqlfEjOfZk2Bpr/Plataforma-de-agendamento--Community---Copy---c%C3%B3pia-?node-id=3-376)
+
+### Fidelidade com o protótipo
+
+| Elemento | Figma | Implementação | Status |
+| --- | --- | --- | --- |
+| Cores de fundo, campos, chips e botão | `#19191b`, `#232325`, `#2f2d32`, `#b8952f` | idênticos (verificado nos estilos computados) | ✅ |
+| Ícones (calendário, usuário, lixeira, períodos) | dourados | `#c7a452` | ✅ |
+| Logo HairDay com tesoura | dourado | idêntico | ✅ |
+| Botão AGENDAR (dourado, texto escuro) | `#b8952f` | idêntico | ✅ |
+| Horários do protótipo (4 + 6 + 3) | 09:00-12:00, 13:00-18:00, 19:00-21:00 | idênticos | ✅ |
+| Faixas dos períodos (`09h-12h`, `13h-18h`, `19h-21h`) | idênticas | idênticas | ✅ |
+| Horário selecionado com borda dourada | dourado | idêntico | ✅ |
+| Layout duas colunas no desktop | 380px + agenda | `380px 668px` | ✅ |
+| Card do período com ícone, título e faixa | idêntico | idêntico | ✅ |
+| Linha da agenda: horário, cliente, lixeira | idêntico | idêntico | ✅ |
+| Formulário à esquerda, agenda à direita | sim | sim | ✅ |
+| Empilhamento em telas pequenas | — | uma coluna | ✅ (adaptação) |
+| Chips de horário já ocupados (esmaecidos) | sim | **não implementado** | ❌ desafio opcional |
+| Tipografia geométrica do protótipo | fonte do Figma | `system-ui` | ⚠️ aproximação |
+| Seta (chevron) no seletor de data | chevron | ícone nativo do navegador | ⚠️ aproximação acessível |
 
 ## 🧪 Testes executados
 
