@@ -46,7 +46,7 @@ export function getPeriodByTime(time: string): PeriodId {
 }
 
 /**
- * Agrupa os agendamentos por período usando reduce().
+ * Agrupa os agendamentos por período (equivalente a um reduce).
  * Cada agendamento cai em exatamente um período.
  */
 export function groupByPeriod(appointments: Appointment[]): Record<PeriodId, Appointment[]> {

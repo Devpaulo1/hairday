@@ -4,6 +4,17 @@ Aplicação web de agendamento de cortes de cabelo, construída com **React**, *
 
 ![Interface desktop](docs/screenshots/hairday-desktop.png)
 
+## 📦 Materiais de entrega
+
+| Item | Onde está |
+| --- | --- |
+| Repositório GitHub com o código-fonte completo | <https://github.com/Devpaulo1/hairday> |
+| README com descrição, tecnologias e instruções | este arquivo |
+| AGENTS.md usado para orientar o agente de IA | [`AGENTS.md`](AGENTS.md) |
+| Capturas desktop e mobile | [`docs/screenshots/`](docs/screenshots/) |
+| Evidências do Context7 MCP | [`docs/context7-evidence.md`](docs/context7-evidence.md) |
+| Evidências de testes (Playwright) | [`docs/playwright-report/index.html`](docs/playwright-report/index.html) · [`resultados.txt`](docs/playwright-report/resultados.txt) |
+
 ## ✨ Funcionalidades
 
 - **Formulário de agendamento**: data, horário (13 horários fixos do protótipo) e nome do cliente.
@@ -25,6 +36,7 @@ npm run dev      # servidor de desenvolvimento
 npm run build    # build de produção (tsc -b && vite build)
 npm run lint     # oxlint
 npm run preview  # pré-visualiza o build
+npm test         # testes end-to-end com Playwright
 ```
 
 > **Atenção:** os dados ficam apenas em memória. Ao recarregar a página, a agenda volta a ser vazia.
@@ -38,8 +50,8 @@ npm run preview  # pré-visualiza o build
 | Custom hook | `hooks/useAppointments.ts` | Atalho tipado para consumir o contexto, com erro claro fora do Provider |
 | Props tipadas | todos os componentes | Cada componente declara o que recebe (`type`) |
 | `map()` | listas de horários e de agendamentos | Renderiza coleções |
-| `filter()` | `AppointmentList` | Separos os registros da data selecionada |
-| `reduce()` | `groupByPeriod` | Agrupa os agendamentos em Manhã, Tarde e Noite |
+| `filter()` | `AppointmentList` | Separa os registros da data selecionada |
+| Função auxiliar tipada (equivalente a `reduce`) | `groupByPeriod` | Agrupa os agendamentos em Manhã, Tarde e Noite |
 | Imutabilidade | `ScheduleProvider` | `setAppointments` sempre cria uma nova lista |
 
 ### Onde os dados moram
@@ -81,6 +93,16 @@ src/
   App.tsx
   main.tsx
   index.css              Tokens de design (@theme) e estilos base
+
+tests/
+  hairday.spec.ts        Testes end-to-end (Playwright)
+
+docs/
+  context7-evidence.md   Evidências das consultas ao Context7 MCP
+  playwright-report/     Relatório HTML da última execução dos testes
+  screenshots/           Capturas desktop e mobile
+
+playwright.config.ts     Configuração do Playwright
 ```
 
 ## 🎨 Tokens de design
@@ -129,27 +151,47 @@ As cores foram extraídas do frame "Projeto" do Figma e transformadas em variáv
 
 ## 🧪 Testes executados
 
-Testes manuais automatizados no navegador (dev server em `http://localhost:5174`):
+Testes **end-to-end automatizados com Playwright** (`tests/hairday.spec.ts`), executados em dois
+projetos: **desktop** (1280×1000) e **mobile** (Pixel 7).
+
+```bash
+npm test                  # roda tudo (sobe o dev server na porta 4174 automaticamente)
+npm run test:ui           # abre o modo interativo do Playwright
+npm run test:report       # abre o relatório HTML gerado
+```
+
+**Resultado da última execução: 22 testes passando (11 verificações × 2 viewports), 0 falhas.**
 
 | # | Verificação | Resultado |
 | --- | --- | --- |
-| 1 | A aplicação abre sem erros | ✅ console sem erros |
-| 2 | Cadastro bloqueado sem nome/data/horário | ✅ mensagem "Preencha a data, o horário, o nome do cliente…" |
-| 3 | Cadastro válido aparece na agenda sem recarregar | ✅ lista atualizada na hora |
-| 4 | Agendamento aparece na data correta | ✅ filtro por data funciona |
-| 5 | Trocar a data da agenda mostra só os registros do dia | ✅ apenas o registro da outra data some |
-| 6 | Agendamento no período correto e em ordem crescente | ✅ 09:00 → 11:00 na Manhã |
-| 7 | Período vazio mostra a mensagem exigida | ✅ texto exato |
-| 8 | Excluir remove somente o item selecionado | ✅ os demais permanecem |
-| 9 | Layout desktop e mobile | ✅ `grid-template-columns: 380px 1fr` no desktop; coluna única no mobile |
-| 11 | Horário já agendado fica indisponível | ✅ chip com `disabled`, `title="Horário já agendado"` e 50% de opacidade; não selecionável |
-| 10 | Build e lint | ✅ `npm run build` e `npm run lint` sem erros |
+| 1 | A aplicação abre sem erros no console | ✅ |
+| 2 | O formulário impede cadastro com campos ausentes | ✅ |
+| 2b | Nome preenchido só com espaços é recusado (`trim()`) | ✅ |
+| 3 | Um cadastro válido aparece na agenda sem recarregar a página | ✅ |
+| 4 | O agendamento aparece na data correta (a agenda troca para a data criada) | ✅ |
+| 5 | Alterar a data da agenda mostra só os registros daquele dia | ✅ |
+| 6 | Registros no período correto e em ordem crescente de horário | ✅ |
+| 7 | Cada período vazio mostra a mensagem exigida | ✅ |
+| 8 | Excluir remove somente o agendamento selecionado | ✅ |
+| 9 | Horário já agendado fica indisponível no formulário | ✅ |
+| 10 | Layout de duas colunas no desktop e uma coluna no mobile (sem rolagem horizontal) | ✅ |
 
-**Limitações dos testes:**
+**Relatório completo:** [`docs/playwright-report/index.html`](docs/playwright-report/index.html) · [`resultados.txt`](docs/playwright-report/resultados.txt)
 
-- O **Playwright MCP não está disponível** neste ambiente. Os testes foram executados pela ferramenta de navegador (Chromium integrado), dirigindo o DOM e conferindo o estado renderizado — não há suíte de testes automatizados no repositório.
-- A captura de desktop foi feita dentro de um `iframe` de 1400px (a janela do navegador do ambiente tem 912px de largura), por isso as fontes aparecem um pouco menores que o natural.
-- Não há teste automatizado de acessibilidade completo; foi verificado manualmente: rótulos associados, `aria-label` na exclusão, `aria-pressed` nos horários, foco visível e navegação por teclado.
+### Limitações e observações
+
+- O **Playwright MCP não está disponível** neste ambiente de desenvolvimento (o único recurso de
+  navegador exposto era o Chromium integrado). Para entregar as evidências exigidas, foi
+  instalado o **Playwright de verdade** (`@playwright/test`) com a suíte de testes acima — assim o
+  projeto continua verificável por qualquer pessoa, com um único comando.
+- Os testes usam o **Chrome já instalado** (`channel: 'chrome'`), o que dispensa baixar
+  navegadores — importante porque o Smart App Control do Windows bloqueia binários recém-baixados.
+- Não existe suíte de **testes unitários** (a lógica está coberta pelo teste end-to-end) nem
+  auditoria automática de acessibilidade; a acessibilidade foi verificada manualmente:
+  rótulos associados, `aria-label` na exclusão, `aria-pressed` nos horários, `role="alert"` no erro,
+  foco visível e navegação por teclado.
+- A captura de desktop foi gerada dentro de um `iframe` de 1400px (a janela do navegador do
+  ambiente de automação tem 912px de largura), por isso as fontes aparecem um pouco menores que o natural.
 
 ## 📚 Consultas ao Context7
 
@@ -157,6 +199,9 @@ Testes manuais automatizados no navegador (dev server em `http://localhost:5174`
 | --- | --- |
 | `reactjs/react.dev` | `createContext` + Provider + `useContext`; `useState` e inputs controlados; tipagem de contexto em TypeScript |
 | `tailwindlabs/tailwindcss.com` | diretiva `@theme` para criar cores customizadas no Tailwind v4 |
+
+**Evidência completa (consultas, trechos oficiais e como viraram código):**
+[`docs/context7-evidence.md`](docs/context7-evidence.md)
 
 ## 📌 Observações do ambiente
 

@@ -16,8 +16,8 @@ type AppointmentListProps = {
 /**
  * Lista os agendamentos da data selecionada, agrupados por período.
  *
- * filter() separa os registros do dia e groupByPeriod() (reduce)
- * distribui cada um em Manhã, Tarde ou Noite.
+ * filter() separa os registros do dia e groupByPeriod() (função auxiliar
+ * tipada, equivalente a reduce) distribui cada um em Manhã, Tarde ou Noite.
  */
 export function AppointmentList({ date }: AppointmentListProps) {
   const { appointments } = useAppointments()
@@ -33,6 +33,7 @@ export function AppointmentList({ date }: AppointmentListProps) {
         return (
           <PeriodSection
             key={period.id}
+            id={period.id}
             title={period.title}
             range={period.range}
             icon={<Icon className="size-4" />}

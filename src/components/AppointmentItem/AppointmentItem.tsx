@@ -14,7 +14,10 @@ export function AppointmentItem({ appointment }: AppointmentItemProps) {
   const { removeAppointment } = useAppointments()
 
   return (
-    <li className="flex items-center gap-3 rounded-md px-2 py-2.5 transition-colors hover:bg-surface-raised">
+    <li
+      data-testid="appointment-item"
+      className="flex items-center gap-3 rounded-md px-2 py-2.5 transition-colors hover:bg-surface-raised"
+    >
       <span className="w-12 shrink-0 text-sm font-semibold text-content">{appointment.time}</span>
       <span className="flex-1 truncate text-sm text-content-muted">{appointment.clientName}</span>
 

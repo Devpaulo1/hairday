@@ -1,4 +1,12 @@
-@import "tailwindcss";
+/*
+ * `source(none)` desliga a varredura automática e as diretivas @source
+ * delimitam onde o Tailwind procura classes. Isso evita que arquivos
+ * gerados (como o relatório HTML do Playwright em docs/) sejam lidos,
+ * inflando o CSS final.
+ */
+@import "tailwindcss" source(none);
+@source "./";
+@source "../index.html";
 
 /*
  * Tokens de design extraídos do protótipo do Figma (frame "Projeto").
