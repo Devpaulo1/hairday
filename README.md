@@ -8,6 +8,7 @@ Aplicação web de agendamento de cortes de cabelo, construída com **React**, *
 
 - **Formulário de agendamento**: data, horário (13 horários fixos do protótipo) e nome do cliente.
 - **Validação**: o cadastro só acontece com data, horário e nome preenchidos; o nome é limpo com `trim()`.
+- **Horários ocupados**: os horários já agendados na data selecionada ficam esmaçados e não clicáveis (como no Figma).
 - **Agenda por dia**: os agendamentos são filtrados pela data selecionada no cabeçalho.
 - **Três períodos**: Manhã (09h-12h), Tarde (13h-18h) e Noite (19h-21h), com ordenação crescente por horário.
 - **Exclusão individual**: botão de lixeira com nome acessível (`aria-label="Excluir agendamento de [nome]"`).
@@ -122,8 +123,8 @@ As cores foram extraídas do frame "Projeto" do Figma e transformadas em variáv
 | Linha da agenda: horário, cliente, lixeira | idêntico | idêntico | ✅ |
 | Formulário à esquerda, agenda à direita | sim | sim | ✅ |
 | Empilhamento em telas pequenas | — | uma coluna | ✅ (adaptação) |
-| Chips de horário já ocupados (esmaecidos) | sim | **não implementado** | ❌ desafio opcional |
-| Tipografia geométrica do protótipo | fonte do Figma | `system-ui` | ⚠️ aproximação |
+| Chips de horário já ocupados (esmaecidos) | sim | sim (`disabled` + `title`) | ✅ |
+| Tipografia geométrica do protótipo | fonte do Figma | `Inter` (Google Fonts) | ✅ aproximação |
 | Seta (chevron) no seletor de data | chevron | ícone nativo do navegador | ⚠️ aproximação acessível |
 
 ## 🧪 Testes executados
@@ -140,7 +141,8 @@ Testes manuais automatizados no navegador (dev server em `http://localhost:5174`
 | 6 | Agendamento no período correto e em ordem crescente | ✅ 09:00 → 11:00 na Manhã |
 | 7 | Período vazio mostra a mensagem exigida | ✅ texto exato |
 | 8 | Excluir remove somente o item selecionado | ✅ os demais permanecem |
-| 9 | Layout desktop e mobile | ✅ `grid-template-columns: 340px 1fr` no desktop; coluna única no mobile |
+| 9 | Layout desktop e mobile | ✅ `grid-template-columns: 380px 1fr` no desktop; coluna única no mobile |
+| 11 | Horário já agendado fica indisponível | ✅ chip com `disabled`, `title="Horário já agendado"` e 50% de opacidade; não selecionável |
 | 10 | Build e lint | ✅ `npm run build` e `npm run lint` sem erros |
 
 **Limitações dos testes:**
@@ -158,5 +160,7 @@ Testes manuais automatizados no navegador (dev server em `http://localhost:5174`
 
 ## 📌 Observações do ambiente
 
+- A **Inter** é carregada do Google Fonts (`index.html`), então a fonte geométrica do protótipo só aparece com internet. Sem conexão, a aplicação cai automaticamente para `system-ui`.
 - O **Smart App Control** do Windows bloqueia o binário nativo `lightningcss@1.33.0`. Por isso o projeto usa `tailwindcss@4.3.3` com o *override* `lightningcss@1.32.0` (versão liberada). Para voltar à 4.3.5, é preciso que o binário 1.33.0 seja liberado pelo sistema.
 - Alterações no `vite.config.ts` exigem **reiniciar** o servidor de desenvolvimento para que o plugin do Tailwind seja aplicado.
+- As capturas de `docs/screenshots/` foram geradas com Chrome headless via DevTools Protocol, criando agendamentos reais na aplicação (6 horários do protótipo).

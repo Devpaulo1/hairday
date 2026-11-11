@@ -16,12 +16,31 @@ type AppointmentFormProps = {
  * A lista de agendamentos NÃO fica aqui: ela vive no Context API.
  */
 export function AppointmentForm({ onAppointmentCreated }: AppointmentFormProps) {
-  const { addAppointment } = useAppointments()
+  const { appointments, addAppointment } = useAppointments()
 
   const [date, setDate] = useState(todayISO())
   const [selectedTime, setSelectedTime] = useState('')
   const [clientName, setClientName] = useState('')
   const [error, setError] = useState('')
+
+  /**
+   * Descobre se um horário já está ocupado na data informada.
+   * É o que faz o chip aparecer apagado, como no protótipo do Figma.
+   */
+  function isTimeBooked(targetDate: string, time: string) {
+    return appointments.some(
+      (appointment) => appointment.date === targetDate && appointment.time === time,
+    )
+  }
+
+  function handleDateChange(nextDate: string) {
+    setDate(nextDate)
+
+    // Se o horário escolhido já estiver ocupado na nova data, limpamos a seleção.
+    if (selectedTime && isTimeBooked(nextDate, selectedTime)) {
+      setSelectedTime('')
+    }
+  }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     // Impede o recarregamento da página ao enviar o formulário.
@@ -36,6 +55,12 @@ export function AppointmentForm({ onAppointmentCreated }: AppointmentFormProps) 
 
     if (missing.length > 0) {
       setError(`Preencha ${missing.join(', ')} para criar o agendamento.`)
+      return
+    }
+
+    // Trava extra: mesmo que o chip esteja marcado, o horário ocupado não entra.
+    if (isTimeBooked(date, selectedTime)) {
+      setError('Este horário já está agendado. Escolha outro horário.')
       return
     }
 
@@ -62,7 +87,7 @@ export function AppointmentForm({ onAppointmentCreated }: AppointmentFormProps) 
             id="appointment-date"
             type="date"
             value={date}
-            onChange={(event) => setDate(event.target.value)}
+            onChange={(event) => handleDateChange(event.target.value)}
             className="w-full rounded-md border border-line bg-surface-inset py-2.5 pl-10 pr-3 text-sm text-content transition-colors focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           />
         </div>
@@ -70,6 +95,9 @@ export function AppointmentForm({ onAppointmentCreated }: AppointmentFormProps) 
 
       <fieldset>
         <legend className="text-sm font-medium text-content-strong">Horários</legend>
+        <p className="mt-1 text-xs text-content-subtle">
+          Horários já agendados na data selecionada ficam indisponíveis.
+        </p>
 
         {PERIODS.map((period) => (
           <div key={period.id} className="mt-4">
@@ -78,6 +106,7 @@ export function AppointmentForm({ onAppointmentCreated }: AppointmentFormProps) 
             </p>
             <div className="mt-2 grid grid-cols-4 gap-2">
               {period.times.map((time) => {
+                const isBooked = isTimeBooked(date, time)
                 const isSelected = selectedTime === time
 
                 return (
@@ -85,11 +114,15 @@ export function AppointmentForm({ onAppointmentCreated }: AppointmentFormProps) 
                     key={time}
                     type="button"
                     onClick={() => setSelectedTime(time)}
+                    disabled={isBooked}
                     aria-pressed={isSelected}
+                    title={isBooked ? 'Horário já agendado' : undefined}
                     className={`rounded-md border px-2 py-2 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
-                      isSelected
-                        ? 'border-accent bg-surface-hover text-accent-soft'
-                        : 'border-line bg-surface-hover text-content-muted hover:border-content-subtle hover:text-content'
+                      isBooked
+                        ? 'cursor-not-allowed border-line/50 bg-surface-hover/40 text-content-subtle/50'
+                        : isSelected
+                          ? 'border-accent bg-surface-hover text-accent-soft'
+                          : 'border-line bg-surface-hover text-content-muted hover:border-content-subtle hover:text-content'
                     }`}
                   >
                     {time}
