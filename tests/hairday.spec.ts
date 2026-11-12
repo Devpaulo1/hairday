@@ -168,7 +168,43 @@ test('9. Horário já agendado fica indisponível no formulário', async ({ page
   await expect(chip).toBeEnabled()
 })
 
-test('10. O layout é responsivo: duas colunas no desktop e uma no mobile', async ({ page }, testInfo) => {
+test('11. O botão de tema alterna entre claro e escuro e guarda a preferência', async ({ page }) => {
+  // O projeto abre no tema escuro (padrão do Figma).
+  await expect(page.locator('html')).toHaveClass(/dark/)
+
+  const fundoEscuro = await page.evaluate(() => getComputedStyle(document.body).backgroundColor)
+  const tituloEscuro = await page.evaluate(
+    () => getComputedStyle(document.querySelector('h1')).color,
+  )
+  const painelEscuro = await page.evaluate(
+    () => getComputedStyle(document.querySelector('aside')).backgroundColor,
+  )
+
+  await page.getByRole('button', { name: 'Mudar para o tema claro' }).click()
+
+  await expect(page.locator('html')).not.toHaveClass(/dark/)
+  await expect(page.getByRole('button', { name: 'Mudar para o tema escuro' })).toBeVisible()
+
+  const fundoClaro = await page.evaluate(() => getComputedStyle(document.body).backgroundColor)
+  const tituloClaro = await page.evaluate(
+    () => getComputedStyle(document.querySelector('h1')).color,
+  )
+  const painelClaro = await page.evaluate(
+    () => getComputedStyle(document.querySelector('aside')).backgroundColor,
+  )
+
+  // As cores realmente mudam (não é só uma classe no <html>).
+  expect(fundoClaro).not.toBe(fundoEscuro)
+  expect(tituloClaro).not.toBe(tituloEscuro)
+  expect(painelClaro).not.toBe(painelEscuro)
+
+  // A preferência fica salva e é reaplicada ao recarregar.
+  await page.reload()
+  await expect(page.locator('html')).not.toHaveClass(/dark/)
+  await expect(page.getByRole('button', { name: 'Mudar para o tema escuro' })).toBeVisible()
+})
+
+test('12. O layout é responsivo: duas colunas no desktop e uma no mobile', async ({ page }, testInfo) => {
   const main = page.locator('main')
 
   if (testInfo.project.name === 'desktop') {

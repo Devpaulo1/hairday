@@ -18,7 +18,7 @@ export function PeriodSection({ id, title, range, icon, appointments }: PeriodSe
   return (
     <section
       data-period={id}
-      className="rounded-xl border border-line bg-surface"
+      className="rounded-xl border border-line bg-card"
     >
       <header className="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
         <h3 className="flex items-center gap-2 text-sm font-medium text-content-muted">

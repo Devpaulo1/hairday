@@ -129,6 +129,42 @@ Ferramenta: `context7` (MCP) → `resolve-library-id` + `query-docs`.
 - `vite.config.ts` usa o plugin `@tailwindcss/vite` (mais rápido que PostCSS).
 - `src/index.css` inicia com `@import "tailwindcss";`.
 
+### Consulta 2.3 (tema claro/escuro)
+
+> **Query:** `dark mode class variant custom-variant and theming with CSS variables @theme inline dynamic theme switching`
+> **Language:** CSS
+
+**Trechos relevantes retornados:**
+
+> ### Configure dark mode with a class selector
+> Override the `dark` variant in `app.css` using `@custom-variant` to apply dark styles when a `.dark` class is present on an ancestor element. In HTML, apply the `dark` class to the `html` root tag.
+> ```css
+> @custom-variant dark (&:where(.dark, .dark *));
+> ```
+
+> ### Referencing dynamic CSS variables with `@theme inline`
+> Use `@theme inline` when defining theme colors that reference other CSS variables such as dynamic runtime root properties.
+> ```css
+> :root {
+>   --acme-canvas-color: oklch(0.967 0.003 264.542);
+> }
+> [data-theme="dark"] {
+>   --acme-canvas-color: oklch(0.21 0.034 264.665);
+> }
+> @theme inline {
+>   --color-canvas: var(--acme-canvas-color);
+> }
+> ```
+
+**Como isso virou código:**
+
+- `src/index.css` define os dois temas em `:root` (claro) e `.dark` (escuro) com as variáveis `--app-*`.
+- O bloco `@theme inline` espelha essas variáveis para os utilitários (`bg-surface` → `background-color: var(--app-surface)`),
+  então **trocar de tema não exige re-renderizar nada em React** — só muda o valor da variável.
+- `@custom-variant dark (&:where(.dark, .dark *))` permite usar `dark:` quando necessário.
+- `src/hooks/useTheme.ts` alterna a classe `dark` no `<html>` e guarda a preferência em `localStorage`.
+- `index.html` aplica o tema salvo **antes da primeira pintura** (script inline), evitando "flash" ao recarregar.
+
 ---
 
 ## Resumo
@@ -136,7 +172,7 @@ Ferramenta: `context7` (MCP) → `resolve-library-id` + `query-docs`.
 | Biblioteca | Consultas | Aplicação |
 | --- | --- | --- |
 | `/reactjs/react.dev` | Context API (`createContext`, `useContext`, Provider no React 19), `useState` com inputs controlados | `ScheduleContext.ts`, `ScheduleProvider.tsx`, `useAppointments.ts`, `AppointmentForm.tsx` |
-| `/tailwindlabs/tailwindcss.com` | Instalação com `@tailwindcss/vite`, diretiva `@theme` para cores e fontes | `vite.config.ts`, `src/index.css` |
+| `/tailwindlabs/tailwindcss.com` | Instalação com `@tailwindcss/vite`, diretiva `@theme` para cores e fontes, tema claro/escuro com `@custom-variant dark` + `@theme inline` | `vite.config.ts`, `src/index.css`, `src/hooks/useTheme.ts`, `src/components/ThemeToggle/` |
 
 > **Como reproduzir as consultas:** peça ao agente de IA para consultar o Context7 MCP com as
 > perguntas listadas acima, ou consulte diretamente em

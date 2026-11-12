@@ -154,7 +154,7 @@ export function AppointmentForm({ onAppointmentCreated }: AppointmentFormProps) 
       {error && (
         <p
           role="alert"
-          className="flex items-start gap-2 rounded-md border border-red-500/40 bg-red-500/10 p-3 text-sm text-red-300"
+          className="flex items-start gap-2 rounded-md border border-danger/40 bg-danger/10 p-3 text-sm text-danger"
         >
           <InfoIcon className="mt-0.5 size-4 shrink-0" />
           {error}
@@ -163,7 +163,7 @@ export function AppointmentForm({ onAppointmentCreated }: AppointmentFormProps) 
 
       <button
         type="submit"
-        className="w-full rounded-md bg-accent px-4 py-3 text-sm font-semibold uppercase tracking-wide text-surface transition-colors hover:bg-accent-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-soft"
+        className="w-full rounded-md bg-accent px-4 py-3 text-sm font-semibold uppercase tracking-wide text-on-accent transition-colors hover:bg-accent-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       >
         Agendar
       </button>

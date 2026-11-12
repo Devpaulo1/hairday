@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="dark">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -11,6 +11,18 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <script>
+      // Aplica o tema salvo antes da primeira pintura, evitando "flash" ao recarregar.
+      ;(() => {
+        try {
+          const saved = window.localStorage.getItem('hairday-theme')
+          const theme = saved === 'light' || saved === 'dark' ? saved : 'dark'
+          document.documentElement.classList.toggle('dark', theme === 'dark')
+        } catch {
+          // Sem acesso ao localStorage: mantém o tema escuro padrão.
+        }
+      })()
+    </script>
     <title>HairDay - Sua agenda</title>
   </head>
   <body>

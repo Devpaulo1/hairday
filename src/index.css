@@ -8,53 +8,121 @@
 @source "./";
 @source "../index.html";
 
+/* O tema escuro é ativado pela classe `dark` no elemento <html>. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /*
  * Tokens de design extraídos do protótipo do Figma (frame "Projeto").
- * No Tailwind v4, cada variável --color-* vira uma classe utilitária:
- * por exemplo, --color-accent gera bg-accent, text-accent e border-accent.
+ *
+ * Cada tema define as variáveis de runtime (--app-*). O bloco @theme inline
+ * abaixo "espelha" essas variáveis para utilitários do Tailwind, então
+ * trocar de tema é só trocar o valor das variáveis: nenhum componente precisa
+ * saber qual tema está ativo.
  */
-@theme {
+
+/* ---------- Tema claro (padrão) ---------- */
+:root {
+  color-scheme: light;
+
+  --app-surface: #f4f4f5;
+  --app-surface-raised: #ffffff;
+  --app-surface-inset: #fafafa;
+  --app-surface-hover: #ececee;
+  --app-card: #ffffff;
+
+  --app-line: #e2e2e6;
+
+  --app-accent: #b8952f;
+  --app-accent-hover: #c7a452;
+  --app-accent-soft: #8a6a12;
+  --app-on-accent: #19191b;
+
+  --app-content-strong: #18181b;
+  --app-content: #3f3f46;
+  --app-content-muted: #6b7280;
+  --app-content-subtle: #71717a;
+
+  --app-danger: #dc2626;
+  --app-shadow: rgba(24, 24, 27, 0.16);
+}
+
+/* ---------- Tema escuro (padrão do Figma) ---------- */
+.dark {
+  color-scheme: dark;
+
+  --app-surface: #19191b;
+  --app-surface-raised: #2a292e;
+  --app-surface-inset: #232325;
+  --app-surface-hover: #2f2d32;
+  --app-card: #19191b;
+
+  --app-line: #2e2c31;
+
+  --app-accent: #b8952f;
+  --app-accent-hover: #c7a452;
+  --app-accent-soft: #c7a452;
+  --app-on-accent: #19191b;
+
+  --app-content-strong: #ffffff;
+  --app-content: #c7c7c9;
+  --app-content-muted: #939395;
+  --app-content-subtle: #6c6c6e;
+
+  --app-danger: #f87171;
+  --app-shadow: rgba(0, 0, 0, 0.9);
+}
+
+@theme inline {
   /* Fundos */
-  --color-surface: #19191b;
-  --color-surface-raised: #2a292e;
-  --color-surface-inset: #232325;
-  --color-surface-hover: #2f2d32;
+  --color-surface: var(--app-surface);
+  --color-surface-raised: var(--app-surface-raised);
+  --color-surface-inset: var(--app-surface-inset);
+  --color-surface-hover: var(--app-surface-hover);
+  --color-card: var(--app-card);
 
   /* Bordas */
-  --color-line: #2e2c31;
+  --color-line: var(--app-line);
 
   /* Amarelo de destaque (logo, botão agendar, ícones) */
-  --color-accent: #b8952f;
-  --color-accent-soft: #c7a452;
+  --color-accent: var(--app-accent);
+  --color-accent-hover: var(--app-accent-hover);
+  --color-accent-soft: var(--app-accent-soft);
+  --color-on-accent: var(--app-on-accent);
 
   /* Textos */
-  --color-content-strong: #ffffff;
-  --color-content: #c7c7c9;
-  --color-content-muted: #939395;
-  --color-content-subtle: #6c6c6e;
+  --color-content-strong: var(--app-content-strong);
+  --color-content: var(--app-content);
+  --color-content-muted: var(--app-content-muted);
+  --color-content-subtle: var(--app-content-subtle);
 
+  /* Erros */
+  --color-danger: var(--app-danger);
+
+  /* Sombra do painel lateral */
+  --shadow-panel: 0 18px 40px -24px var(--app-shadow);
+}
+
+@theme {
   --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
 }
 
 @layer base {
-  /* Deixa os controles nativos (calendário do input date) no tema escuro. */
-  html {
-    color-scheme: dark;
-  }
-
   body {
     @apply bg-surface font-sans text-content antialiased;
   }
 
-  /* O input de data do navegador precisa ficar visível no fundo escuro. */
+  /* O ícone nativo do calendário precisa ficar visível nos dois temas. */
   input[type='date']::-webkit-calendar-picker-indicator {
-    /* Filtro para deixar o ícone nativo com o tom dourado do Figma. */
-    filter: invert(78%) sepia(45%) saturate(650%) hue-rotate(2deg) brightness(92%);
-    opacity: 0.9;
     cursor: pointer;
+    opacity: 0.75;
   }
 
   input[type='date']::-webkit-calendar-picker-indicator:hover {
     opacity: 1;
+  }
+
+  /* No tema escuro o ícone nativo é claro: aplicamos um filtro para deixá-lo dourado. */
+  .dark input[type='date']::-webkit-calendar-picker-indicator {
+    filter: invert(78%) sepia(45%) saturate(650%) hue-rotate(2deg) brightness(92%);
   }
 }

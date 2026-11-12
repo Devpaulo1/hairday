@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { ScissorsIcon } from '../Icons'
+import { ThemeToggle } from '../ThemeToggle/ThemeToggle'
 
 type ScheduleSidebarProps = {
   children: ReactNode
@@ -10,12 +11,16 @@ type ScheduleSidebarProps = {
  */
 export function ScheduleSidebar({ children }: ScheduleSidebarProps) {
   return (
-    <aside className="rounded-2xl bg-surface-raised p-6 shadow-[0_18px_40px_-24px_rgba(0,0,0,0.9)] md:p-8">
+    <aside className="rounded-2xl bg-surface-raised p-6 shadow-panel md:p-8">
       <header>
-        <p className="flex items-center gap-2 text-lg font-semibold tracking-tight text-accent-soft">
-          <ScissorsIcon className="size-5" />
-          HairDay
-        </p>
+        <div className="flex items-center justify-between gap-3">
+          <p className="flex items-center gap-2 text-lg font-semibold tracking-tight text-accent-soft">
+            <ScissorsIcon className="size-5" />
+            HairDay
+          </p>
+
+          <ThemeToggle />
+        </div>
 
         <h1 className="mt-8 text-xl font-semibold text-content-strong md:text-2xl">
           Agende um atendimento
